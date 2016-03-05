@@ -60,6 +60,24 @@ public class ContinuousSpeechRecognition
     }
 
 
+    public void start() {
+        continuousListening = true;
+        mSpeechRecognizer.startListening(mRecognizerIntent);
+    }
+
+
+    public void stop() {
+        continuousListening = false;
+        mSpeechRecognizer.stopListening();
+    }
+
+
+    public void destroy() {
+        continuousListening = false;
+        mSpeechRecognizer.destroy();
+    }
+
+
     /*
     SETTERS
      */
@@ -114,6 +132,7 @@ public class ContinuousSpeechRecognition
 
     @Override
     public void onError(int error) {
+        mOnTextListener.onError(error);
 
         switch (error) {
             case SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS: // Insufficient permissions
