@@ -132,23 +132,24 @@ public class ContinuousSpeechRecognition
 
     @Override
     public void onError(int error) {
-        mOnTextListener.onError(error);
+        if (mOnTextListener != null) {
+            mOnTextListener.onError(error);
+        }
 
         switch (error) {
-            case SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS: // Insufficient permissions
-            case SpeechRecognizer.ERROR_AUDIO: // Audio recording error
-            case SpeechRecognizer.ERROR_CLIENT: // Client side error
-            case SpeechRecognizer.ERROR_NETWORK: // Network error
-            case SpeechRecognizer.ERROR_NETWORK_TIMEOUT: // Network timeout
-            case SpeechRecognizer.ERROR_RECOGNIZER_BUSY: // RecognitionService busy
-            case SpeechRecognizer.ERROR_SERVER: // Error from server
-                break;
-
-
-            case SpeechRecognizer.ERROR_NO_MATCH: // No match
-            case SpeechRecognizer.ERROR_SPEECH_TIMEOUT: // No speech input
+            case SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS:
+            case SpeechRecognizer.ERROR_AUDIO:
+            case SpeechRecognizer.ERROR_NETWORK:
+            case SpeechRecognizer.ERROR_NETWORK_TIMEOUT:
+            case SpeechRecognizer.ERROR_SERVER:
+            case SpeechRecognizer.ERROR_CLIENT:
+            case SpeechRecognizer.ERROR_NO_MATCH:
+            case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
+            case SpeechRecognizer.ERROR_RECOGNIZER_BUSY:
 
                 if (continuousListening) {
+                    mSpeechRecognizer.destroy();
+                    mSpeechRecognizer.setRecognitionListener(this);
                     mSpeechRecognizer.startListening(mRecognizerIntent);
                 }
                 break;
@@ -162,7 +163,6 @@ public class ContinuousSpeechRecognition
     @Override
     public void onResults(Bundle results) {
         if (mOnTextListener != null) {
-
             ArrayList<String> matchedText = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
             mOnTextListener.onTextMatched(matchedText);
         }
