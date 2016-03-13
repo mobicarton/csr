@@ -34,6 +34,9 @@ public class ContinuousSpeechRecognition
     }
 
 
+    private static final String LANGUAGE_PREFERENCE_DEFAULT = "en";
+
+
     private OnTextListener mOnTextListener;
     private OnRmsListener mOnRmsListener;
 
@@ -51,6 +54,11 @@ public class ContinuousSpeechRecognition
 
 
     public ContinuousSpeechRecognition(Context context) {
+        this(context, LANGUAGE_PREFERENCE_DEFAULT);
+    }
+
+
+    public ContinuousSpeechRecognition(Context context, String languagePreference) {
 
         mContinuousListening = false;
 
@@ -61,7 +69,7 @@ public class ContinuousSpeechRecognition
 
 
         mRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        mRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "en"); // TODO : make it as option (parameter)
+        mRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, languagePreference);
         mRecognizerIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, context.getPackageName());
         mRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
         mRecognizerIntent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 5); // doesn't really work ?
