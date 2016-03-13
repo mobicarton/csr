@@ -3,6 +3,7 @@ package mobi.carton.csr;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
@@ -41,12 +42,19 @@ public class ContinuousSpeechRecognition
     private Intent mRecognizerIntent;
 
 
+    private AudioManager mAudioManager;
+    private int mStreamVolume = 0;
+
+    private boolean mJustStarted;
+
     private boolean mContinuousListening;
 
 
     public ContinuousSpeechRecognition(Context context) {
 
         mContinuousListening = false;
+
+        mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 
         mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(context);
         mSpeechRecognizer.setRecognitionListener(this);
@@ -61,6 +69,7 @@ public class ContinuousSpeechRecognition
 
 
     public void start() {
+        mJustStarted = true;
         mContinuousListening = true;
         mSpeechRecognizer.startListening(mRecognizerIntent);
     }
@@ -69,11 +78,12 @@ public class ContinuousSpeechRecognition
     public void stop() {
         mContinuousListening = false;
         mSpeechRecognizer.stopListening();
+        mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, mStreamVolume, 0);
     }
 
 
     public void destroy() {
-        mContinuousListening = false;
+        stop();
         mSpeechRecognizer.destroy();
     }
 
@@ -100,7 +110,11 @@ public class ContinuousSpeechRecognition
 
     @Override
     public void onReadyForSpeech(Bundle params) {
-
+        if (mJustStarted) {
+            mStreamVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+            mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, 0);
+            mJustStarted = false;
+        }
     }
 
 
