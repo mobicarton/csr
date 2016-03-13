@@ -41,12 +41,12 @@ public class ContinuousSpeechRecognition
     private Intent mRecognizerIntent;
 
 
-    private boolean continuousListening;
+    private boolean mContinuousListening;
 
 
     public ContinuousSpeechRecognition(Context context) {
 
-        continuousListening = false;
+        mContinuousListening = false;
 
         mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(context);
         mSpeechRecognizer.setRecognitionListener(this);
@@ -61,19 +61,19 @@ public class ContinuousSpeechRecognition
 
 
     public void start() {
-        continuousListening = true;
+        mContinuousListening = true;
         mSpeechRecognizer.startListening(mRecognizerIntent);
     }
 
 
     public void stop() {
-        continuousListening = false;
+        mContinuousListening = false;
         mSpeechRecognizer.stopListening();
     }
 
 
     public void destroy() {
-        continuousListening = false;
+        mContinuousListening = false;
         mSpeechRecognizer.destroy();
     }
 
@@ -147,7 +147,7 @@ public class ContinuousSpeechRecognition
             case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
             case SpeechRecognizer.ERROR_RECOGNIZER_BUSY:
 
-                if (continuousListening) {
+                if (mContinuousListening) {
                     mSpeechRecognizer.destroy();
                     mSpeechRecognizer.setRecognitionListener(this);
                     mSpeechRecognizer.startListening(mRecognizerIntent);
@@ -167,7 +167,7 @@ public class ContinuousSpeechRecognition
             mOnTextListener.onTextMatched(matchedText);
         }
 
-        if (continuousListening)
+        if (mContinuousListening)
             mSpeechRecognizer.startListening(mRecognizerIntent);
     }
 
