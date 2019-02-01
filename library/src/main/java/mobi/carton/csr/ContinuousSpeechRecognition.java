@@ -12,6 +12,10 @@ import android.speech.SpeechRecognizer;
 import java.util.ArrayList;
 
 
+/**
+ * A simple class to handle continuously speech to recognition from Android
+ * Do not use it in a production level, this is for development only.
+ */
 public class ContinuousSpeechRecognition
         implements
         RecognitionListener {
@@ -116,6 +120,7 @@ public class ContinuousSpeechRecognition
      */
 
 
+    // RecognitionListener
     @Override
     public void onReadyForSpeech(Bundle params) {
         if (mJustStarted) {
@@ -126,12 +131,14 @@ public class ContinuousSpeechRecognition
     }
 
 
+    // RecognitionListener
     @Override
     public void onBeginningOfSpeech() {
 
     }
 
 
+    // RecognitionListener
     @Override
     public void onRmsChanged(float rmsdB) {
         if (mOnRmsListener != null) {
@@ -140,18 +147,21 @@ public class ContinuousSpeechRecognition
     }
 
 
+    // RecognitionListener
     @Override
     public void onBufferReceived(byte[] buffer) {
 
     }
 
 
+    // RecognitionListener
     @Override
     public void onEndOfSpeech() {
 
     }
 
 
+    // RecognitionListener
     @Override
     public void onError(int error) {
         if (mOnTextListener != null) {
@@ -182,6 +192,7 @@ public class ContinuousSpeechRecognition
     }
 
 
+    // RecognitionListener
     @Override
     public void onResults(Bundle results) {
         if (mOnTextListener != null) {
@@ -194,12 +205,14 @@ public class ContinuousSpeechRecognition
     }
 
 
+    // RecognitionListener
     @Override
     public void onPartialResults(Bundle partialResults) {
 
     }
 
 
+    // RecognitionListener
     @Override
     public void onEvent(int eventType, Bundle params) {
 
